@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand />
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="efebb9b0-7734-4d74-9f85-cc6d36eec94b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/index.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mainwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/mainwindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mainwindow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/mainwindow.ui" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1gULnlIyzMwHjVn5s02ooCHCTpn" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager">
+    <configuration name="index" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="image2text" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../rishabh_env/bin/python3.6" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/index.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="efebb9b0-7734-4d74-9f85-cc6d36eec94b" name="Default Changelist" comment="" />
+      <created>1598164393577</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1598164393577</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="SHOW_DETAILS_IN_CHANGES" value="false" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="master" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="283" y="120" width="1084" height="710" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598167204237">
+      <screen x="51" y="27" width="1549" height="873" />
+    </state>
+    <state x="283" y="120" width="1084" height="710" key="#com.intellij.execution.impl.EditConfigurationsDialog/51.27.1549.873@51.27.1549.873" timestamp="1598167204237" />
+    <state x="608" y="233" width="424" height="484" key="FileChooserDialogImpl" timestamp="1598164440290">
+      <screen x="51" y="27" width="1549" height="873" />
+    </state>
+    <state x="608" y="233" width="424" height="484" key="FileChooserDialogImpl/51.27.1549.873@51.27.1549.873" timestamp="1598164440290" />
+    <state width="1526" height="2" key="GridCell.Tab.0.bottom" timestamp="1598168603134">
+      <screen x="51" y="27" width="1549" height="873" />
+    </state>
+    <state width="1526" height="2" key="GridCell.Tab.0.bottom/51.27.1549.873@51.27.1549.873" timestamp="1598168603134" />
+    <state width="1526" height="2" key="GridCell.Tab.0.center" timestamp="1598168603134">
+      <screen x="51" y="27" width="1549" height="873" />
+    </state>
+    <state width="1526" height="2" key="GridCell.Tab.0.center/51.27.1549.873@51.27.1549.873" timestamp="1598168603134" />
+    <state width="1526" height="2" key="GridCell.Tab.0.left" timestamp="1598168603133">
+      <screen x="51" y="27" width="1549" height="873" />
+    </state>
+    <state width="1526" height="2" key="GridCell.Tab.0.left/51.27.1549.873@51.27.1549.873" timestamp="1598168603133" />
+    <state width="1526" height="2" key="GridCell.Tab.0.right" timestamp="1598168603134">
+      <screen x="51" y="27" width="1549" height="873" />
+    </state>
+    <state width="1526" height="2" key="GridCell.Tab.0.right/51.27.1549.873@51.27.1549.873" timestamp="1598168603134" />
+    <state x="314" y="97" key="SettingsEditor" timestamp="1598164411977">
+      <screen x="51" y="27" width="1549" height="873" />
+    </state>
+    <state x="314" y="97" key="SettingsEditor/51.27.1549.873@51.27.1549.873" timestamp="1598164411977" />
+    <state x="606" y="377" width="428" height="170" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1598164706458">
+      <screen x="51" y="27" width="1549" height="873" />
+    </state>
+    <state x="606" y="377" width="428" height="170" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/51.27.1549.873@51.27.1549.873" timestamp="1598164706458" />
+  </component>
+</project>

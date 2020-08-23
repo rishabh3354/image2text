@@ -10,6 +10,9 @@
     <height>336</height>
    </rect>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -177,6 +180,21 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QTextEdit" name="textEdit"/>
+       </item>
+       <item>
+        <widget class="QComboBox" name="translate_comboBox">
+         <property name="maxCount">
+          <number>1</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>Eng</string>
+          </property>
+         </item>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -203,9 +221,8 @@
     <property name="title">
      <string>Export</string>
     </property>
-    <addaction name="export_plain_text"/>
+    <addaction name="actionText"/>
     <addaction name="separator"/>
-    <addaction name="export_pdf"/>
    </widget>
    <widget class="QMenu" name="menuPrefrence">
     <property name="title">
@@ -238,7 +255,7 @@
     <string>Exit</string>
    </property>
   </action>
-  <action name="export_plain_text">
+  <action name="actionText">
    <property name="text">
     <string>Plain Text</string>
    </property>
@@ -246,11 +263,6 @@
   <action name="actionPDFF">
    <property name="text">
     <string>PDF</string>
-   </property>
-  </action>
-  <action name="export_pdf">
-   <property name="text">
-    <string>PDF Format</string>
    </property>
   </action>
  </widget>

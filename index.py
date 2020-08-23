@@ -1,9 +1,11 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from PyQt5.QtGui import QPixmap
+from helper import LANG
 from mainwindow import Ui_MainWindow
 import extract
 import os
+from googletrans import Translator
 
 from utils import ExportFile
 
@@ -57,6 +59,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         path = self.ui.path_edit.text()
         if os.path.isfile(path):
             self.ui.textedit.setText(extract.return_string(path))
+
+    def set_items_in_combobox(self):
+        trans = Translator()
+        current_lang = trans.detect(self.ui.textEdit.toPlainText()).lang
+
+        lang_list = LANG.values()
+        for x in lang_list:
+            self.ui.translate_comboBox.addItem(x)
+        self.ui.translate_comboBox.setCurrentText(LANG[current_lang])
+
+        # translates mthe text into german language
+
+    def translate_data(self):
+        trans = Translator()
+        current_lang = self.ui.translate_comboBox.currentText()
+        raw_str = self.ui.textEdit.toPlainText()
+        to_trans = list(LANG.keys())[list(LANG.values()).index(current_lang)]
+        trans_text = trans.translate(raw_str, dest=to_trans)
+        self.ui.textEdit.setText(str(trans_text))
 
     def export(self, format_type):
         types = {"pdf": "PDF files (*.pdf)", "plain_text": "Plain Text (*.txt)"}
