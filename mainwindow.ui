@@ -221,8 +221,10 @@
     <property name="title">
      <string>Export</string>
     </property>
-    <addaction name="actionText"/>
+    <addaction name="export_txt"/>
     <addaction name="separator"/>
+    <addaction name="export_pdf"/>
+    <addaction name="export_mp3"/>
    </widget>
    <widget class="QMenu" name="menuPrefrence">
     <property name="title">
@@ -255,7 +257,7 @@
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionText">
+  <action name="export_txt">
    <property name="text">
     <string>Plain Text</string>
    </property>
@@ -263,6 +265,16 @@
   <action name="actionPDFF">
    <property name="text">
     <string>PDF</string>
+   </property>
+  </action>
+  <action name="export_pdf">
+   <property name="text">
+    <string>PDF</string>
+   </property>
+  </action>
+  <action name="export_mp3">
+   <property name="text">
+    <string>MP3</string>
    </property>
   </action>
  </widget>
