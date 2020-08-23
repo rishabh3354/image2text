@@ -23,12 +23,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.convert_button.clicked.connect(self.get_string)
         self.ui.export_plain_text.triggered.connect(lambda: self.export(format_type="plain_text"))
         self.ui.export_pdf.triggered.connect(lambda: self.export(format_type="pdf"))
+        self.ui.textEdit.textChanged.connect(self.set_items_in_combobox)
+        self.ui.translate_comboBox.currentTextChanged.connect(self.translate_data)
 
     # logic when browse button is clicked
     def browse_button_clicked(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self, 'Select Image', "/home", "Images (*.png *.jpeg *.jpg)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self, 'Select Image', "/home/", "Images (*.png *.jpeg *.jpg)", options=options)
         if fileName != "":
             self.ui.path_edit.setText(fileName)
             self.ui.preview_button.setEnabled(True)
@@ -58,7 +60,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def get_string(self):
         path = self.ui.path_edit.text()
         if os.path.isfile(path):
-            self.ui.textedit.setText(extract.return_string(path))
+            self.ui.textEdit.setText(extract.return_string(path))
 
     def set_items_in_combobox(self):
         trans = Translator()
