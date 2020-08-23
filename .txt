@@ -1,0 +1,3 @@
+lam curious about
+area-filling text
+rendering options

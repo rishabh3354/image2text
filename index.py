@@ -1,4 +1,7 @@
+import re
 import sys
+import urllib.request
+
 
 from PyQt5 import QtCore
 from PyQt5.QtCore import QSize
@@ -26,7 +29,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.export_mp3.setEnabled(False)
         self.ui.path_edit.textEdited.connect(self.enable_preview_button)
         self.ui.browse_button.clicked.connect(self.browse_button_clicked)
-        self.ui.preview_button.clicked.connect(self.preview_button_clicked)
+        self.ui.preview_button.clicked.connect(lambda: self.preview_button_clicked())
         self.ui.convert_button.clicked.connect(self.get_string)
         self.ui.export_txt.triggered.connect(lambda: self.export(format_type="plain_text"))
         self.ui.export_pdf.triggered.connect(lambda: self.export(format_type="pdf"))
@@ -49,18 +52,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # logic when preview button clicked
     def preview_button_clicked(self):
-        path = self.ui.path_edit.text()
+        msg = QMessageBox()
+        self.path = self.ui.path_edit.text()
+        if self.path.startswith("http://") or self.path.startswith("https://"):
+            file_extension_list = [".jpg", ".png", ".jpeg", ".webp", ".tiff", ".bmp", ".svg"]
+            file_name, file_extension = os.path.splitext(self.path)
+            if file_extension in file_extension_list or (
+                    self.path.startswith("http://") or self.path.startswith("https://")):
+                if file_extension in file_extension_list:
+                    try:
+                        self.path = urllib.request.urlretrieve(self.path, f"image{file_extension}")[0]
+                    except Exception as error:
+                        msg.about(self, 'Error', "Invalid URL, Please select Valid Image URL")
+                        return False
+                else:
+                    msg.about(self, 'Error', "Invalid URL, Please select Valid Image URL")
+                    return False
 
-        if os.path.isfile(path):
-            # below line if file exist enable convert button
-            self.ui.convert_button.setEnabled(True)
-            pixmap = QPixmap(path)
-            pixmap4 = pixmap.scaled(700, 700, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-
-            self.ui.preview_label.setPixmap(pixmap4)
+                if os.path.isfile(self.path):
+                    self.ui.convert_button.setEnabled(True)
+                    pixmap = QPixmap(self.path)
+                    pixmap4 = pixmap.scaled(700, 700, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+                    self.ui.preview_label.setPixmap(pixmap4)
+                else:
+                    msg = QMessageBox()
+                    msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
         else:
-            msg = QMessageBox()
-            msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
+            if os.path.isfile(self.path):
+                self.ui.convert_button.setEnabled(True)
+                pixmap = QPixmap(self.path)
+                pixmap4 = pixmap.scaled(700, 700, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+                self.ui.preview_label.setPixmap(pixmap4)
+            else:
+                msg = QMessageBox()
+                msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
 
     def enable_preview_button(self):
         if self.ui.path_edit.text() != "":
@@ -69,9 +94,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.preview_button.setEnabled(False)
 
     def get_string(self):
-        path = self.ui.path_edit.text()
-        if os.path.isfile(path):
-            self.ui.textEdit.setText(extract.return_string(path))
+        if os.path.isfile(self.path):
+            self.ui.textEdit.setText(extract.return_string(self.path))
             self.resize(1300, 500)
 
     def set_items_in_combobox(self):
