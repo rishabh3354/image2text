@@ -4,7 +4,6 @@ import urllib.request
 
 
 from PyQt5 import QtCore
-from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from PyQt5.QtGui import QPixmap
 from helper import LANG
@@ -22,20 +21,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.setWindowTitle("Image2Text")
-        self.ui.preview_button.setEnabled(False)
-        self.ui.convert_button.setEnabled(False)
-        self.ui.export_txt.setEnabled(False)
-        self.ui.export_pdf.setEnabled(False)
-        self.ui.export_mp3.setEnabled(False)
         self.ui.path_edit.textEdited.connect(self.enable_preview_button)
         self.ui.browse_button.clicked.connect(self.browse_button_clicked)
         self.ui.preview_button.clicked.connect(lambda: self.preview_button_clicked())
-        self.ui.convert_button.clicked.connect(self.get_string)
+        self.ui.convert_button.clicked.connect(self.convert_button_clicked)
         self.ui.export_txt.triggered.connect(lambda: self.export(format_type="plain_text"))
         self.ui.export_pdf.triggered.connect(lambda: self.export(format_type="pdf"))
         self.ui.export_mp3.triggered.connect(lambda: self.export(format_type="mp3"))
-        self.ui.textEdit.textChanged.connect(self.set_items_in_combobox)
         self.ui.translate_comboBox.currentTextChanged.connect(self.translate_data)
+
+        self.msg = QMessageBox()
 
     # logic when browse button is clicked
     def browse_button_clicked(self):
@@ -47,12 +42,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.path_edit.setText(fileName)
             self.ui.preview_button.setEnabled(True)
         else:
-            msg = QMessageBox()
-            msg.about(self, 'Error', "File PATH can't be empty, Please select Image File")
+            self.msg.about(self, 'Error', "File PATH can't be empty, Please select Image File")
 
     # logic when preview button clicked
     def preview_button_clicked(self):
-        msg = QMessageBox()
         self.path = self.ui.path_edit.text()
         if self.path.startswith("http://") or self.path.startswith("https://"):
             file_extension_list = [".jpg", ".png", ".jpeg", ".webp", ".tiff", ".bmp", ".svg"]
@@ -63,29 +56,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     try:
                         self.path = urllib.request.urlretrieve(self.path, f"image{file_extension}")[0]
                     except Exception as error:
-                        msg.about(self, 'Error', "Invalid URL, Please select Valid Image URL")
+                        self.msg.about(self, 'Error', "Invalid URL, Please select Valid Image URL")
                         return False
                 else:
-                    msg.about(self, 'Error', "Invalid URL, Please select Valid Image URL")
+                    self.msg.about(self, 'Error', "Invalid URL, Please select Valid Image URL")
                     return False
 
-                if os.path.isfile(self.path):
-                    self.ui.convert_button.setEnabled(True)
-                    pixmap = QPixmap(self.path)
-                    pixmap4 = pixmap.scaled(700, 700, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-                    self.ui.preview_label.setPixmap(pixmap4)
-                else:
-                    msg = QMessageBox()
-                    msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
+
+
+        if os.path.isfile(self.path):
+            self.ui.convert_button.setEnabled(True)
+            pixmap = QPixmap(self.path)
+            pixmap4 = pixmap.scaled(700, 700, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            self.ui.preview_label.setPixmap(pixmap4)
         else:
-            if os.path.isfile(self.path):
-                self.ui.convert_button.setEnabled(True)
-                pixmap = QPixmap(self.path)
-                pixmap4 = pixmap.scaled(700, 700, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-                self.ui.preview_label.setPixmap(pixmap4)
-            else:
-                msg = QMessageBox()
-                msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
+            self.msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
 
     def enable_preview_button(self):
         if self.ui.path_edit.text() != "":
@@ -93,16 +78,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.ui.preview_button.setEnabled(False)
 
-    def get_string(self):
-        if os.path.isfile(self.path):
-            self.ui.textEdit.setText(extract.return_string(self.path))
-            self.resize(1300, 500)
+    def convert_button_clicked(self):
+        if self.ui.to_comboBox.currentText() == "Plain Text":
+            if os.path.isfile(self.path):
+                extracted_text = extract.return_string(self.path)
+                if extracted_text != "":
+                    self.set_items_in_combobox()
+                    self.ui.textEdit.setText(extract.return_string(self.path))
+                else:
+                    self.msg.about(self, 'Error', "File PATH can't be empty, Please select Image File")
+
+                self.resize(1300, 500)
 
     def set_items_in_combobox(self):
-        trans = Translator()
-        current_lang = trans.detect(self.ui.textEdit.toPlainText()).lang
+        self.ui.translate_comboBox.setEnabled(True)
         lang_list = LANG.values()
         self.ui.translate_comboBox.addItems(lang_list)
+        trans = Translator()
+        current_lang = trans.detect(self.ui.textEdit.toPlainText()).lang
         self.ui.translate_comboBox.setCurrentText(LANG[str(current_lang).lower()])
 
     def translate_data(self):
@@ -116,6 +109,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.to_trans = list(LANG.keys())[list(LANG.values()).index(current_lang)]
         trans_text = trans.translate(raw_str, dest=self.to_trans).text
         self.ui.textEdit.setText(str(trans_text))
+        self.ui.translate_comboBox.setCurrentText(self.to_trans)
 
     def export(self, format_type):
         types = {"pdf": "PDF files (*.pdf)", "plain_text": "Plain Text (*.txt)", "mp3": "Mp3 (*.mp3)"}
@@ -125,13 +119,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                                 "/home/Documents/Imagetotext",
                                                 self.tr(types[format_type]), options=options)[0]
         data = str(self.ui.textEdit.toPlainText()).strip("\f")
-        msg = QMessageBox()
+        self.msg = QMessageBox()
 
         if data and data != "":
             ExportFile(data, file_path, format_type=format_type, lang=self.to_trans).export()
-            msg.about(self, 'Success', "Export Successfully!")
+            self.msg.about(self, 'Success', "Export Successfully!")
         else:
-            msg.warning(self, "Failed", "Nothing to export!")
+            self.msg.warning(self, "Failed", "Nothing to export!")
 
 
 if __name__ == "__main__":

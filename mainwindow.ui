@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>707</width>
-    <height>336</height>
+    <width>834</width>
+    <height>455</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -37,7 +37,7 @@
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
           </property>
           <property name="placeholderText">
-           <string>Paste URL / Browse file.</string>
+           <string>Paste URL / Browse file (Img, Txt, PDF)</string>
           </property>
          </widget>
         </item>
@@ -50,6 +50,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="preview_button">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -82,29 +85,14 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QComboBox" name="from_comboBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <item>
-           <property name="text">
-            <string>ing</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>pdf</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item>
          <widget class="QLabel" name="label_2">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
           <property name="text">
-           <string>TO</string>
+           <string>Convert To</string>
           </property>
          </widget>
         </item>
@@ -118,20 +106,23 @@
           </property>
           <item>
            <property name="text">
-            <string>audio</string>
+            <string>Plain Text</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>text</string>
+            <string>Audio</string>
            </property>
           </item>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="convert_button">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
-           <string>convert</string>
+           <string>Go</string>
           </property>
          </widget>
         </item>
@@ -141,6 +132,18 @@
     </item>
     <item>
      <widget class="Line" name="line">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>10</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
@@ -171,29 +174,54 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string/>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="leftMargin">
+          <number>0</number>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="topMargin">
+          <number>0</number>
          </property>
-        </widget>
+         <item>
+          <widget class="QComboBox" name="translate_comboBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maxCount">
+            <number>1</number>
+           </property>
+           <item>
+            <property name="text">
+             <string>Select Language</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string>Buy me a Coffee</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QTextEdit" name="textEdit"/>
-       </item>
-       <item>
-        <widget class="QComboBox" name="translate_comboBox">
-         <property name="maxCount">
-          <number>1</number>
-         </property>
-         <item>
-          <property name="text">
-           <string>Eng</string>
-          </property>
-         </item>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -205,7 +233,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>707</width>
+     <width>834</width>
      <height>20</height>
     </rect>
    </property>
@@ -221,15 +249,17 @@
     <property name="title">
      <string>Export</string>
     </property>
-    <addaction name="export_txt"/>
+    <addaction name="actionText"/>
     <addaction name="separator"/>
-    <addaction name="export_pdf"/>
-    <addaction name="export_mp3"/>
+    <addaction name="actionPDF"/>
+    <addaction name="actionAudio"/>
    </widget>
    <widget class="QMenu" name="menuPrefrence">
     <property name="title">
      <string>Prefrence</string>
     </property>
+    <addaction name="actionDark_Mode"/>
+    <addaction name="actionLight_Mode"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -246,18 +276,27 @@
    <property name="text">
     <string>Open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionSave">
    <property name="text">
     <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
   </action>
-  <action name="export_txt">
+  <action name="actionText">
    <property name="text">
     <string>Plain Text</string>
    </property>
@@ -267,14 +306,24 @@
     <string>PDF</string>
    </property>
   </action>
-  <action name="export_pdf">
+  <action name="actionPDF">
    <property name="text">
     <string>PDF</string>
    </property>
   </action>
-  <action name="export_mp3">
+  <action name="actionAudio">
    <property name="text">
-    <string>MP3</string>
+    <string>Audio</string>
+   </property>
+  </action>
+  <action name="actionDark_Mode">
+   <property name="text">
+    <string>Dark Mode</string>
+   </property>
+  </action>
+  <action name="actionLight_Mode">
+   <property name="text">
+    <string>Light Mode</string>
    </property>
   </action>
  </widget>
