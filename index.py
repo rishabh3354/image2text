@@ -1,11 +1,11 @@
-import re
 import sys
 import urllib.request
 
-
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import QUrl, QFileInfo
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStyle
+from PyQt5.QtGui import QPixmap, QGuiApplication
 from helper import LANG
 from mainwindow import Ui_MainWindow
 import extract
@@ -21,16 +21,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.setWindowTitle("Image2Text")
-        self.ui.path_edit.textEdited.connect(self.enable_preview_button)
+
+        self.msg = QMessageBox()
+
+        self.ui.path_edit.textChanged.connect(self.enable_preview_button)
         self.ui.browse_button.clicked.connect(self.browse_button_clicked)
-        self.ui.preview_button.clicked.connect(lambda: self.preview_button_clicked())
-        self.ui.convert_button.clicked.connect(self.convert_button_clicked)
+        self.ui.preview_button.clicked.connect(self.preview_button_clicked)
+        self.ui.translate_comboBox.currentTextChanged.connect(self.translate_data)
+        self.ui.paste_button.clicked.connect(self.paste_button_clicked)
+
         self.ui.export_txt.triggered.connect(lambda: self.export(format_type="plain_text"))
         self.ui.export_pdf.triggered.connect(lambda: self.export(format_type="pdf"))
         self.ui.export_mp3.triggered.connect(lambda: self.export(format_type="mp3"))
-        self.ui.translate_comboBox.currentTextChanged.connect(self.translate_data)
 
-        self.msg = QMessageBox()
+        # media player
+        self.player = QMediaPlayer()
+        self.player.setVolume(60)
+        self.ui.volume_slider.setValue(60)
+        self.player.positionChanged.connect(self.media_position_changed)
+        self.player.stateChanged.connect(self.mediastate_changed)
+        self.player.durationChanged.connect(self.update_duration)
+        self.ui.volume_slider.valueChanged.connect(self.player.setVolume)
+        self.ui.radio_seek_slider.valueChanged.connect(self.player.setPosition)
+        self.player.setMedia(QMediaContent(QUrl.fromLocalFile("/home/sherlock/bellaciao.mp3"))) #path of the extracted file
+        self.ui.play_pause_button.clicked.connect(self.play_pause_button_clicked)
+        self.ui.speed_comboBox.currentIndexChanged.connect(self.set_playback_speed)
 
     # logic when browse button is clicked
     def browse_button_clicked(self):
@@ -43,6 +58,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.preview_button.setEnabled(True)
         else:
             self.msg.about(self, 'Error', "File PATH can't be empty, Please select Image File")
+
+    def paste_button_clicked(self):
+        clipbord_text = QGuiApplication.clipboard().text()
+        if clipbord_text != "":
+            self.ui.path_edit.setText(clipbord_text)
 
     # logic when preview button clicked
     def preview_button_clicked(self):
@@ -62,13 +82,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.msg.about(self, 'Error', "Invalid URL, Please select Valid Image URL")
                     return False
 
-
-
         if os.path.isfile(self.path):
-            self.ui.convert_button.setEnabled(True)
             pixmap = QPixmap(self.path)
             pixmap4 = pixmap.scaled(700, 700, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
             self.ui.preview_label.setPixmap(pixmap4)
+
+            extracted_text = extract.return_string(self.path)
+            if extracted_text != "":
+                self.set_items_in_combobox()
+                self.ui.textEdit.setText(extract.return_string(self.path))
+                self.resize(1300, 500)
         else:
             self.msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
 
@@ -77,18 +100,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.preview_button.setEnabled(True)
         else:
             self.ui.preview_button.setEnabled(False)
-
-    def convert_button_clicked(self):
-        if self.ui.to_comboBox.currentText() == "Plain Text":
-            if os.path.isfile(self.path):
-                extracted_text = extract.return_string(self.path)
-                if extracted_text != "":
-                    self.set_items_in_combobox()
-                    self.ui.textEdit.setText(extract.return_string(self.path))
-                else:
-                    self.msg.about(self, 'Error', "File PATH can't be empty, Please select Image File")
-
-                self.resize(1300, 500)
 
     def set_items_in_combobox(self):
         self.ui.translate_comboBox.setEnabled(True)
@@ -119,13 +130,53 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                                 "/home/Documents/Imagetotext",
                                                 self.tr(types[format_type]), options=options)[0]
         data = str(self.ui.textEdit.toPlainText()).strip("\f")
-        self.msg = QMessageBox()
-
         if data and data != "":
             ExportFile(data, file_path, format_type=format_type, lang=self.to_trans).export()
             self.msg.about(self, 'Success', "Export Successfully!")
         else:
             self.msg.warning(self, "Failed", "Nothing to export!")
+
+    def play_pause_button_clicked(self):
+        if self.player.state() == 1:
+            self.player.pause()
+        else:
+            self.player.play()
+
+    def media_position_changed(self, position):
+        self.ui.position.setText(self.hhmmss(position))
+        self.ui.radio_seek_slider.setValue(position)
+
+    def mediastate_changed(self, state):
+        if self.player.state() == self.player.PlayingState:
+            self.ui.play_pause_button.setIcon(
+                self.style().standardIcon(QStyle.SP_MediaPause)
+
+            )
+
+        else:
+            self.ui.play_pause_button.setIcon(
+                self.style().standardIcon(QStyle.SP_MediaPlay)
+
+            )
+
+    def update_duration(self, duration):
+        self.ui.radio_seek_slider.setMaximum(duration)
+
+        if duration >= 0:
+            self.ui.duration.setText(self.hhmmss(duration))
+
+    def set_playback_speed(self):
+        rate = float((self.ui.speed_comboBox.currentText()).split('x')[0])
+        self.player.setPlaybackRate(rate)
+
+    def hhmmss(self, ms):
+        # s = 1000
+        # m = 60000
+        # h = 3600000
+        s = round(ms / 1000)
+        m, s = divmod(s, 60)
+        h, m = divmod(m, 60)
+        return ("%d:%02d:%02d" % (h, m, s)) if h else ("%d:%02d" % (m, s))
 
 
 if __name__ == "__main__":
