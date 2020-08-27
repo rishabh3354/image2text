@@ -58,7 +58,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.preview_button.setEnabled(True)
         else:
             self.msg.about(self, 'Error', "File PATH can't be empty, Please select Image File")
-
+            #bipin
     def paste_button_clicked(self):
         clipbord_text = QGuiApplication.clipboard().text()
         if clipbord_text != "":
