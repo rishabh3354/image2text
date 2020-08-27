@@ -2,7 +2,6 @@ from fpdf import FPDF
 from gtts import gTTS
 
 
-
 class ExportFile:
     def __init__(self, data, file_path, format_type="plain_text", lang=None):
         self.data = data

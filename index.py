@@ -1,6 +1,7 @@
 import sys
 import urllib.request
 
+import PyPDF2
 from PyQt5 import QtCore
 from PyQt5.QtCore import QUrl, QFileInfo
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
@@ -51,7 +52,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def browse_button_clicked(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self, 'Select Image', "/home/", "Images (*.png *.jpeg *.jpg)",
+        fileName, _ = QFileDialog.getOpenFileName(self, 'Select Image', "/home/", "Images (*.png *.jpeg *.jpg *.pdf)",
                                                   options=options)
         if fileName != "":
             self.ui.path_edit.setText(fileName)
@@ -67,14 +68,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # logic when preview button clicked
     def preview_button_clicked(self):
         self.path = self.ui.path_edit.text()
+        self.file_name, self.file_extension = os.path.splitext(self.path)
         if self.path.startswith("http://") or self.path.startswith("https://"):
-            file_extension_list = [".jpg", ".png", ".jpeg", ".webp", ".tiff", ".bmp", ".svg"]
-            file_name, file_extension = os.path.splitext(self.path)
-            if file_extension in file_extension_list or (
+            file_extension_list = [".jpg", ".png", ".jpeg", ".webp", ".tiff", ".bmp", ".svg", ".pdf"]
+            if self.file_extension in file_extension_list or (
                     self.path.startswith("http://") or self.path.startswith("https://")):
-                if file_extension in file_extension_list:
+                if self.file_extension in file_extension_list:
                     try:
-                        self.path = urllib.request.urlretrieve(self.path, f"image{file_extension}")[0]
+                        self.path = urllib.request.urlretrieve(self.path, f"image{self.file_extension}")[0]
                     except Exception as error:
                         self.msg.about(self, 'Error', "Invalid URL, Please select Valid Image URL")
                         return False
@@ -87,10 +88,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pixmap4 = pixmap.scaled(700, 700, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
             self.ui.preview_label.setPixmap(pixmap4)
 
-            extracted_text = extract.return_string(self.path)
+            if self.file_extension == ".pdf":
+                extracted_text = self.extract_data_from_pdf()
+            else:
+                extracted_text = extract.return_string(self.path)
             if extracted_text != "":
                 self.set_items_in_combobox()
-                self.ui.textEdit.setText(extract.return_string(self.path))
+                self.ui.textEdit.setText(extracted_text)
                 self.resize(1300, 500)
         else:
             self.msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
@@ -100,6 +104,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.preview_button.setEnabled(True)
         else:
             self.ui.preview_button.setEnabled(False)
+
+    def extract_data_from_pdf(self):
+        data_by_pages = ""
+        with open(self.path, mode='rb') as f:
+            reader = PyPDF2.PdfFileReader(f)
+            for count, page in enumerate(reader.pages, 1):
+                data_by_pages += f"Page{count}:\n\n{page.extractText()}\n\n"
+        return str(data_by_pages)
 
     def set_items_in_combobox(self):
         self.ui.translate_comboBox.setEnabled(True)

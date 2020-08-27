@@ -8,6 +8,7 @@
     <list default="true" id="efebb9b0-7734-4d74-9f85-cc6d36eec94b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/index.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,11 +34,12 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.index">
     <configuration name="index" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="image2text" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -59,6 +61,36 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="scratch" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="image2text" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.index" />
+      <item itemvalue="Python.scratch" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.scratch" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -111,50 +143,50 @@
     </state>
     <state x="283" y="120" width="1084" height="710" key="#com.intellij.execution.impl.EditConfigurationsDialog/51.27.1549.873@51.27.1549.873" timestamp="1598172223372" />
     <state x="349" y="139" key="#com.intellij.execution.impl.EditConfigurationsDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1598170263166" />
-    <state x="787" y="429" width="701" height="471" key="#xdebugger.evaluate" timestamp="1598194637229">
+    <state x="669" y="332" width="701" height="471" key="#xdebugger.evaluate" timestamp="1598557066241">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
-    <state x="787" y="429" width="701" height="471" key="#xdebugger.evaluate/51.27.1549.873@51.27.1549.873" timestamp="1598194637229" />
+    <state x="669" y="332" width="701" height="471" key="#xdebugger.evaluate/51.27.1549.873@51.27.1549.873" timestamp="1598557066241" />
     <state x="608" y="233" width="424" height="484" key="FileChooserDialogImpl" timestamp="1598164440290">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
     <state x="608" y="233" width="424" height="484" key="FileChooserDialogImpl/51.27.1549.873@51.27.1549.873" timestamp="1598164440290" />
-    <state width="1503" height="183" key="GridCell.Tab.0.bottom" timestamp="1598194908698">
+    <state width="1503" height="83" key="GridCell.Tab.0.bottom" timestamp="1598557990210">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
-    <state width="1503" height="183" key="GridCell.Tab.0.bottom/51.27.1549.873@51.27.1549.873" timestamp="1598194908698" />
+    <state width="1503" height="83" key="GridCell.Tab.0.bottom/51.27.1549.873@51.27.1549.873" timestamp="1598557990210" />
     <state width="1825" height="267" key="GridCell.Tab.0.bottom/72.27.1848.1053@72.27.1848.1053" timestamp="1598170654797" />
-    <state width="1503" height="183" key="GridCell.Tab.0.center" timestamp="1598194908698">
+    <state width="1503" height="83" key="GridCell.Tab.0.center" timestamp="1598557990210">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
-    <state width="1503" height="183" key="GridCell.Tab.0.center/51.27.1549.873@51.27.1549.873" timestamp="1598194908698" />
+    <state width="1503" height="83" key="GridCell.Tab.0.center/51.27.1549.873@51.27.1549.873" timestamp="1598557990210" />
     <state width="1825" height="267" key="GridCell.Tab.0.center/72.27.1848.1053@72.27.1848.1053" timestamp="1598170654797" />
-    <state width="1503" height="183" key="GridCell.Tab.0.left" timestamp="1598194908697">
+    <state width="1503" height="83" key="GridCell.Tab.0.left" timestamp="1598557990210">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
-    <state width="1503" height="183" key="GridCell.Tab.0.left/51.27.1549.873@51.27.1549.873" timestamp="1598194908697" />
+    <state width="1503" height="83" key="GridCell.Tab.0.left/51.27.1549.873@51.27.1549.873" timestamp="1598557990210" />
     <state width="1825" height="267" key="GridCell.Tab.0.left/72.27.1848.1053@72.27.1848.1053" timestamp="1598170654797" />
-    <state width="1503" height="183" key="GridCell.Tab.0.right" timestamp="1598194908698">
+    <state width="1503" height="83" key="GridCell.Tab.0.right" timestamp="1598557990210">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
-    <state width="1503" height="183" key="GridCell.Tab.0.right/51.27.1549.873@51.27.1549.873" timestamp="1598194908698" />
+    <state width="1503" height="83" key="GridCell.Tab.0.right/51.27.1549.873@51.27.1549.873" timestamp="1598557990210" />
     <state width="1825" height="267" key="GridCell.Tab.0.right/72.27.1848.1053@72.27.1848.1053" timestamp="1598170654797" />
-    <state width="1503" height="175" key="GridCell.Tab.1.bottom" timestamp="1598194797454">
+    <state width="1503" height="137" key="GridCell.Tab.1.bottom" timestamp="1598557278344">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
-    <state width="1503" height="175" key="GridCell.Tab.1.bottom/51.27.1549.873@51.27.1549.873" timestamp="1598194797454" />
-    <state width="1503" height="175" key="GridCell.Tab.1.center" timestamp="1598194797453">
+    <state width="1503" height="137" key="GridCell.Tab.1.bottom/51.27.1549.873@51.27.1549.873" timestamp="1598557278344" />
+    <state width="1503" height="137" key="GridCell.Tab.1.center" timestamp="1598557278344">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
-    <state width="1503" height="175" key="GridCell.Tab.1.center/51.27.1549.873@51.27.1549.873" timestamp="1598194797453" />
-    <state width="1503" height="175" key="GridCell.Tab.1.left" timestamp="1598194797453">
+    <state width="1503" height="137" key="GridCell.Tab.1.center/51.27.1549.873@51.27.1549.873" timestamp="1598557278344" />
+    <state width="1503" height="137" key="GridCell.Tab.1.left" timestamp="1598557278343">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
-    <state width="1503" height="175" key="GridCell.Tab.1.left/51.27.1549.873@51.27.1549.873" timestamp="1598194797453" />
-    <state width="1503" height="175" key="GridCell.Tab.1.right" timestamp="1598194797453">
+    <state width="1503" height="137" key="GridCell.Tab.1.left/51.27.1549.873@51.27.1549.873" timestamp="1598557278343" />
+    <state width="1503" height="137" key="GridCell.Tab.1.right" timestamp="1598557278344">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
-    <state width="1503" height="175" key="GridCell.Tab.1.right/51.27.1549.873@51.27.1549.873" timestamp="1598194797453" />
+    <state width="1503" height="137" key="GridCell.Tab.1.right/51.27.1549.873@51.27.1549.873" timestamp="1598557278344" />
     <state x="613" y="146" width="414" height="633" key="RollbackChangesDialog" timestamp="1598189011800">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
@@ -171,16 +203,5 @@
       <screen x="51" y="27" width="1549" height="873" />
     </state>
     <state x="606" y="377" width="428" height="170" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/51.27.1549.873@51.27.1549.873" timestamp="1598164706458" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/index.py</url>
-          <line>54</line>
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
