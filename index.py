@@ -84,8 +84,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     return False
 
         if os.path.isfile(self.path):
-            pixmap = QPixmap(self.path)
-            pixmap4 = pixmap.scaled(700, 700, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            height, width = 700, 700
+            if self.file_extension == ".pdf":
+                pdf_default_image_path = "pdf_109.png"
+                pixmap = QPixmap(pdf_default_image_path)
+                height, width = 300, 300
+            else:
+                pixmap = QPixmap(self.path)
+            pixmap4 = pixmap.scaled(height, width, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
             self.ui.preview_label.setPixmap(pixmap4)
 
             if self.file_extension == ".pdf":
