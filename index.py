@@ -2,10 +2,12 @@ import sys
 import urllib.request
 
 from PyQt5 import QtCore
-from PyQt5.QtCore import QUrl, QFileInfo
+from PyQt5.QtCore import QUrl, QFileInfo, QFile
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QStyle
 from PyQt5.QtGui import QPixmap, QGuiApplication
+from gtts import gTTS
+
 from helper import LANG
 from mainwindow import Ui_MainWindow
 import extract
@@ -43,9 +45,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.player.durationChanged.connect(self.update_duration)
         self.ui.volume_slider.valueChanged.connect(self.player.setVolume)
         self.ui.radio_seek_slider.valueChanged.connect(self.player.setPosition)
-        self.player.setMedia(QMediaContent(QUrl.fromLocalFile("/home/sherlock/bellaciao.mp3"))) #path of the extracted file
+        # self.player.setMedia(QMediaContent(QUrl.fromLocalFile("/home/sherlock/bellaciao.mp3"))) #path of the extracted file
         self.ui.play_pause_button.clicked.connect(self.play_pause_button_clicked)
         self.ui.speed_comboBox.currentIndexChanged.connect(self.set_playback_speed)
+        self.ui.stop_button.clicked.connect(self.player.stop)
 
     # logic when browse button is clicked
     def browse_button_clicked(self):
@@ -58,11 +61,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.preview_button.setEnabled(True)
         else:
             self.msg.about(self, 'Error', "File PATH can't be empty, Please select Image File")
-            #bipin
+
     def paste_button_clicked(self):
-        clipbord_text = QGuiApplication.clipboard().text()
-        if clipbord_text != "":
-            self.ui.path_edit.setText(clipbord_text)
+        clipboard_text = QGuiApplication.clipboard().text()
+        if clipboard_text != "":
+            self.ui.path_edit.setText(clipboard_text)
 
     # logic when preview button clicked
     def preview_button_clicked(self):
@@ -106,8 +109,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         lang_list = LANG.values()
         self.ui.translate_comboBox.addItems(lang_list)
         trans = Translator()
-        current_lang = trans.detect(self.ui.textEdit.toPlainText()).lang
-        self.ui.translate_comboBox.setCurrentText(LANG[str(current_lang).lower()])
+        self.current_lang = trans.detect(self.ui.textEdit.toPlainText()).lang
+        self.ui.translate_comboBox.setCurrentText(LANG[str(self.current_lang).lower()])
 
     def translate_data(self):
         self.ui.export_txt.setEnabled(True)
@@ -137,6 +140,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.msg.warning(self, "Failed", "Nothing to export!")
 
     def play_pause_button_clicked(self):
+        self.txt= self.ui.textEdit.toPlainText()
+        if  self.txt != "":
+            myobj = gTTS(text=self.txt, lang=self.current_lang, slow=False)
+            myobj.save('audio/tmp.mp3')
+
+            self.player.setMedia(
+                QMediaContent(QUrl.fromLocalFile('/home/sherlock/image2text/audio/tmp.mp3')))  # path of the extracted file
+
         if self.player.state() == 1:
             self.player.pause()
         else:
