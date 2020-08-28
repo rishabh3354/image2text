@@ -1,6 +1,7 @@
 import sys
 import urllib.request
 
+import PyPDF2
 from PyQt5 import QtCore
 from PyQt5.QtCore import QUrl, QFileInfo, QFile
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
@@ -49,12 +50,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.play_pause_button.clicked.connect(self.play_pause_button_clicked)
         self.ui.speed_comboBox.currentIndexChanged.connect(self.set_playback_speed)
         self.ui.stop_button.clicked.connect(self.player.stop)
+        self.ui.pushButton.clicked.connect(self.convert_audio)
 
     # logic when browse button is clicked
     def browse_button_clicked(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self, 'Select Image', "/home/", "Images (*.png *.jpeg *.jpg)",
+        fileName, _ = QFileDialog.getOpenFileName(self, 'Select Image', "/home/", "Images (*.png *.jpeg *.jpg *.pdf)",
                                                   options=options)
         if fileName != "":
             self.ui.path_edit.setText(fileName)
@@ -69,40 +71,56 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # logic when preview button clicked
     def preview_button_clicked(self):
+        file_extension_list = [".jpg", ".png", ".jpeg", ".webp", ".tiff", ".bmp", ".svg", ".pdf"]
         self.path = self.ui.path_edit.text()
-        if self.path.startswith("http://") or self.path.startswith("https://"):
-            file_extension_list = [".jpg", ".png", ".jpeg", ".webp", ".tiff", ".bmp", ".svg"]
-            file_name, file_extension = os.path.splitext(self.path)
-            if file_extension in file_extension_list or (
-                    self.path.startswith("http://") or self.path.startswith("https://")):
-                if file_extension in file_extension_list:
+        self.file_name, self.file_extension = os.path.splitext(self.path)
+        if self.file_extension in file_extension_list:
+            if self.path.startswith("http://") or self.path.startswith("https://"):
+                if self.path.startswith("http://") or self.path.startswith("https://"):
+
                     try:
-                        self.path = urllib.request.urlretrieve(self.path, f"image{file_extension}")[0]
+                        self.path = urllib.request.urlretrieve(self.path, f"image{self.file_extension}")[0]
                     except Exception as error:
                         self.msg.about(self, 'Error', "Invalid URL, Please select Valid Image URL")
                         return False
+
+            if os.path.isfile(self.path):
+                height, width = 700, 700
+                if self.file_extension == ".pdf":
+                    pdf_default_image_path = "pdf_109.png"
+                    pixmap = QPixmap(pdf_default_image_path)
+                    height, width = 300, 300
                 else:
-                    self.msg.about(self, 'Error', "Invalid URL, Please select Valid Image URL")
-                    return False
+                    pixmap = QPixmap(self.path)
+                pixmap4 = pixmap.scaled(height, width, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+                self.ui.preview_label.setPixmap(pixmap4)
 
-        if os.path.isfile(self.path):
-            pixmap = QPixmap(self.path)
-            pixmap4 = pixmap.scaled(700, 700, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-            self.ui.preview_label.setPixmap(pixmap4)
-
-            extracted_text = extract.return_string(self.path)
-            if extracted_text != "":
-                self.set_items_in_combobox()
-                self.ui.textEdit.setText(extract.return_string(self.path))
-                self.resize(1300, 500)
+                if self.file_extension == ".pdf":
+                    extracted_text = self.extract_data_from_pdf()
+                else:
+                    extracted_text = extract.return_string(self.path)
+                if extracted_text != "":
+                    self.set_items_in_combobox()
+                    self.ui.textEdit.setText(extracted_text)
+                    self.resize(1300, 500)
+            else:
+                self.msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
         else:
-            self.msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
+                    self.msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
 
     def enable_preview_button(self):
         if self.ui.path_edit.text() != "":
             self.ui.preview_button.setEnabled(True)
         else:
             self.ui.preview_button.setEnabled(False)
+
+    def extract_data_from_pdf(self):
+        data_by_pages = ""
+        with open(self.path, mode='rb') as f:
+            reader = PyPDF2.PdfFileReader(f)
+            for count, page in enumerate(reader.pages, 1):
+                data_by_pages += f"Page{count}:\n\n{page.extractText()}\n\n"
+        return str(data_by_pages)
 
     def set_items_in_combobox(self):
         self.ui.translate_comboBox.setEnabled(True)
@@ -139,14 +157,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.msg.warning(self, "Failed", "Nothing to export!")
 
-    def play_pause_button_clicked(self):
-        self.txt= self.ui.textEdit.toPlainText()
-        if  self.txt != "":
-            myobj = gTTS(text=self.txt, lang=self.current_lang, slow=False)
-            myobj.save('audio/tmp.mp3')
+    def convert_audio(self):
+        self.txt = self.ui.textEdit.toPlainText()
+        if self.txt != "":
+            myob = gTTS(text=self.txt, lang=self.current_lang, slow=False)
+            myob.save('audio/tmp2.mp3')
 
-            self.player.setMedia(
-                QMediaContent(QUrl.fromLocalFile('/home/sherlock/image2text/audio/tmp.mp3')))  # path of the extracted file
+            if os.path.isfile("/home/sherlock/image2text/audio/tmp2.mp3"):
+                self.player.setMedia(QMediaContent(
+                    QUrl.fromLocalFile('/home/sherlock/image2text/audio/tmp2.mp3')))  # path of the extracted file
+                print("done")
+
+    def play_pause_button_clicked(self):
 
         if self.player.state() == 1:
             self.player.pause()
