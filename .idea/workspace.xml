@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BranchesTreeState">
-    <expand />
-    <select />
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="efebb9b0-7734-4d74-9f85-cc6d36eec94b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/image2text.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/image2text.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/index.py" afterDir="false" />
     </list>
@@ -115,30 +127,34 @@
       <screen x="51" y="27" width="1549" height="873" />
     </state>
     <state x="787" y="429" width="701" height="471" key="#xdebugger.evaluate/51.27.1549.873@51.27.1549.873" timestamp="1598194637229" />
+    <state x="247" y="121" width="1478" height="879" key="DiffContextDialog" timestamp="1598552290555">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="247" y="121" width="1478" height="879" key="DiffContextDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1598552290555" />
     <state x="608" y="233" width="424" height="484" key="FileChooserDialogImpl" timestamp="1598164440290">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
     <state x="608" y="233" width="424" height="484" key="FileChooserDialogImpl/51.27.1549.873@51.27.1549.873" timestamp="1598164440290" />
-    <state width="1503" height="183" key="GridCell.Tab.0.bottom" timestamp="1598194908698">
-      <screen x="51" y="27" width="1549" height="873" />
+    <state width="1825" height="111" key="GridCell.Tab.0.bottom" timestamp="1598598073469">
+      <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state width="1503" height="183" key="GridCell.Tab.0.bottom/51.27.1549.873@51.27.1549.873" timestamp="1598194908698" />
-    <state width="1825" height="267" key="GridCell.Tab.0.bottom/72.27.1848.1053@72.27.1848.1053" timestamp="1598170654797" />
-    <state width="1503" height="183" key="GridCell.Tab.0.center" timestamp="1598194908698">
-      <screen x="51" y="27" width="1549" height="873" />
+    <state width="1825" height="111" key="GridCell.Tab.0.bottom/72.27.1848.1053@72.27.1848.1053" timestamp="1598598073469" />
+    <state width="1825" height="111" key="GridCell.Tab.0.center" timestamp="1598598073468">
+      <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state width="1503" height="183" key="GridCell.Tab.0.center/51.27.1549.873@51.27.1549.873" timestamp="1598194908698" />
-    <state width="1825" height="267" key="GridCell.Tab.0.center/72.27.1848.1053@72.27.1848.1053" timestamp="1598170654797" />
-    <state width="1503" height="183" key="GridCell.Tab.0.left" timestamp="1598194908697">
-      <screen x="51" y="27" width="1549" height="873" />
+    <state width="1825" height="111" key="GridCell.Tab.0.center/72.27.1848.1053@72.27.1848.1053" timestamp="1598598073468" />
+    <state width="1825" height="111" key="GridCell.Tab.0.left" timestamp="1598598073467">
+      <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state width="1503" height="183" key="GridCell.Tab.0.left/51.27.1549.873@51.27.1549.873" timestamp="1598194908697" />
-    <state width="1825" height="267" key="GridCell.Tab.0.left/72.27.1848.1053@72.27.1848.1053" timestamp="1598170654797" />
-    <state width="1503" height="183" key="GridCell.Tab.0.right" timestamp="1598194908698">
-      <screen x="51" y="27" width="1549" height="873" />
+    <state width="1825" height="111" key="GridCell.Tab.0.left/72.27.1848.1053@72.27.1848.1053" timestamp="1598598073467" />
+    <state width="1825" height="111" key="GridCell.Tab.0.right" timestamp="1598598073468">
+      <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state width="1503" height="183" key="GridCell.Tab.0.right/51.27.1549.873@51.27.1549.873" timestamp="1598194908698" />
-    <state width="1825" height="267" key="GridCell.Tab.0.right/72.27.1848.1053@72.27.1848.1053" timestamp="1598170654797" />
+    <state width="1825" height="111" key="GridCell.Tab.0.right/72.27.1848.1053@72.27.1848.1053" timestamp="1598598073468" />
     <state width="1503" height="175" key="GridCell.Tab.1.bottom" timestamp="1598194797454">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
@@ -155,14 +171,19 @@
       <screen x="51" y="27" width="1549" height="873" />
     </state>
     <state width="1503" height="175" key="GridCell.Tab.1.right/51.27.1549.873@51.27.1549.873" timestamp="1598194797453" />
-    <state x="613" y="146" width="414" height="633" key="RollbackChangesDialog" timestamp="1598189011800">
-      <screen x="51" y="27" width="1549" height="873" />
+    <state x="742" y="171" width="414" height="633" key="RollbackChangesDialog" timestamp="1598552178151">
+      <screen x="72" y="27" width="1848" height="1053" />
     </state>
     <state x="613" y="146" width="414" height="633" key="RollbackChangesDialog/51.27.1549.873@51.27.1549.873" timestamp="1598189011800" />
+    <state x="742" y="171" key="RollbackChangesDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1598552178151" />
     <state x="314" y="97" key="SettingsEditor" timestamp="1598172203826">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
     <state x="314" y="97" key="SettingsEditor/51.27.1549.873@51.27.1549.873" timestamp="1598172203826" />
+    <state x="835" y="239" width="311" height="636" key="VCS.ChangeListViewerDialog" timestamp="1598552293197">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="835" y="239" width="311" height="636" key="VCS.ChangeListViewerDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1598552293197" />
     <state width="774" height="437" key="XDebugger.FullValuePopup" timestamp="1598188130738">
       <screen x="51" y="27" width="1549" height="873" />
     </state>
@@ -171,16 +192,9 @@
       <screen x="51" y="27" width="1549" height="873" />
     </state>
     <state x="606" y="377" width="428" height="170" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/51.27.1549.873@51.27.1549.873" timestamp="1598164706458" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/index.py</url>
-          <line>54</line>
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <state x="720" y="401" width="724" height="352" key="git4idea.ui.GitUnstashDialog" timestamp="1598552295908">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="720" y="401" width="724" height="352" key="git4idea.ui.GitUnstashDialog/72.27.1848.1053@72.27.1848.1053" timestamp="1598552295908" />
   </component>
 </project>
