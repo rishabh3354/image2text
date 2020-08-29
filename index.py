@@ -15,7 +15,9 @@ import extract
 import os
 from googletrans import Translator
 
+
 from utils import ExportFile
+QT_DEBUG_PLUGINS = 1
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -38,7 +40,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.export_mp3.triggered.connect(lambda: self.export(format_type="mp3"))
 
         # media player
-        self.player = QMediaPlayer()
+        self.player = QMediaPlayer(self)
         self.player.setVolume(60)
         self.ui.volume_slider.setValue(60)
         self.player.positionChanged.connect(self.media_position_changed)
@@ -106,7 +108,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 self.msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
         else:
-                    self.msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
+            self.msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
 
     def enable_preview_button(self):
         if self.ui.path_edit.text() != "":
@@ -159,21 +161,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def convert_audio(self):
         self.txt = self.ui.textEdit.toPlainText()
+        if os.path.isfile("audio/tmp.mp3"):
+            os.remove("audio/tmp.mp3")
         if self.txt != "":
             myob = gTTS(text=self.txt, lang=self.current_lang, slow=False)
-            myob.save('audio/tmp2.mp3')
-
-            if os.path.isfile("/home/sherlock/image2text/audio/tmp2.mp3"):
-                self.player.setMedia(QMediaContent(
-                    QUrl.fromLocalFile('/home/sherlock/image2text/audio/tmp2.mp3')))  # path of the extracted file
-                print("done")
+            myob.save('audio/tmp.mp3')
+            print("done")
 
     def play_pause_button_clicked(self):
+        self.audio_path = QFileInfo("audio/tmp.mp3").canonicalFilePath()
+        if os.path.isfile(self.audio_path):
+            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(self.audio_path)))  # path of the extracted file
 
-        if self.player.state() == 1:
-            self.player.pause()
-        else:
-            self.player.play()
+            if self.player.state() == 1:
+                self.player.pause()
+            else:
+                self.player.play()
+        print(self.player.bufferStatus())
 
     def media_position_changed(self, position):
         self.ui.position.setText(self.hhmmss(position))
