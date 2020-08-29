@@ -2,6 +2,7 @@ import sys
 import urllib.request
 
 import PyPDF2
+import requests
 from PyQt5 import QtCore
 from PyQt5.QtCore import QUrl, QFileInfo, QFile
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
@@ -28,6 +29,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowTitle("Image2Text")
 
         self.msg = QMessageBox()
+        self.multiple_file_flag = False
+        self.browse_button_flag = True
 
         self.ui.path_edit.textChanged.connect(self.enable_preview_button)
         self.ui.browse_button.clicked.connect(self.browse_button_clicked)
@@ -58,13 +61,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def browse_button_clicked(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self, 'Select Image', "/home/", "Images (*.png *.jpeg *.jpg *.pdf)",
+        fileName, _ = QFileDialog.getOpenFileNames(self, 'Select Image', "/home/", "Images (*.png *.jpeg *.jpg *.pdf)",
                                                   options=options)
-        if fileName != "":
-            self.ui.path_edit.setText(fileName)
-            self.ui.preview_button.setEnabled(True)
-        else:
+        if len(fileName) == 0:
             self.msg.about(self, 'Error', "File PATH can't be empty, Please select Image File")
+            return False
+        if len(fileName) >= 2:
+            self.multiple_file_flag = True
+
+        self.path = fileName[0]
+        self.path_list = fileName
+        self.ui.path_edit.setText(','.join([str(elem) for elem in fileName]))
+        self.ui.preview_button.setEnabled(True)
+        return True
 
     def paste_button_clicked(self):
         clipboard_text = QGuiApplication.clipboard().text()
@@ -73,23 +82,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # logic when preview button clicked
     def preview_button_clicked(self):
+        if not MainWindow.check_internet_connection():
+            self.msg.about(self, 'No internet connection', "Please check your internet connection!")
+            return False
+        if not self.browse_button_flag:
+            self.path = self.ui.path_edit.text()
         file_extension_list = [".jpg", ".png", ".jpeg", ".webp", ".tiff", ".bmp", ".svg", ".pdf"]
-        self.path = self.ui.path_edit.text()
         self.file_name, self.file_extension = os.path.splitext(self.path)
         if self.file_extension in file_extension_list:
             if self.path.startswith("http://") or self.path.startswith("https://"):
                 if self.path.startswith("http://") or self.path.startswith("https://"):
-
                     try:
                         self.path = urllib.request.urlretrieve(self.path, f"image{self.file_extension}")[0]
                     except Exception as error:
-                        self.msg.about(self, 'Error', "Invalid URL, Please select Valid Image URL")
+                        self.msg.about(self, 'Error', "Unable to fetch data, please check your url")
                         return False
 
             if os.path.isfile(self.path):
                 height, width = 700, 700
                 if self.file_extension == ".pdf":
-                    pdf_default_image_path = "pdf_109.png"
+                    pdf_default_image_path = "asset/pdf_109.png"
                     pixmap = QPixmap(pdf_default_image_path)
                     height, width = 300, 300
                 else:
@@ -111,10 +123,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
 
     def enable_preview_button(self):
-        if self.ui.path_edit.text() != "":
+        str_data = self.ui.path_edit.text()
+        if str_data != "":
             self.ui.preview_button.setEnabled(True)
+            if str_data.startswith("http://") or str_data.startswith("https://"):
+                self.browse_button_flag = False
         else:
             self.ui.preview_button.setEnabled(False)
+
+    @staticmethod
+    def check_internet_connection():
+        try:
+            requests.get("http://www.google.com", timeout=5)
+            return True
+        except (requests.ConnectionError, requests.Timeout):
+            return False
 
     def extract_data_from_pdf(self):
         data_by_pages = ""
