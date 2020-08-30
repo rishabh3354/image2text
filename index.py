@@ -16,7 +16,7 @@ import extract
 import os
 from googletrans import Translator
 
-
+from pdftoimagetotext import pdf_to_image
 from utils import ExportFile
 QT_DEBUG_PLUGINS = 1
 
@@ -31,6 +31,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.msg = QMessageBox()
         self.multiple_file_flag = False
         self.browse_button_flag = True
+        self.click_counter = 1
+        self.pdf_browse_file_flag = False
 
         self.ui.path_edit.textChanged.connect(self.enable_preview_button)
         self.ui.browse_button.clicked.connect(self.browse_button_clicked)
@@ -41,6 +43,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.export_txt.triggered.connect(lambda: self.export(format_type="plain_text"))
         self.ui.export_pdf.triggered.connect(lambda: self.export(format_type="pdf"))
         self.ui.export_mp3.triggered.connect(lambda: self.export(format_type="mp3"))
+        self.ui.next_button.clicked.connect(self.get_next_button_clicked_action)
+        self.ui.prev_button.clicked.connect(self.get_prev_button_clicked_action)
+
 
         # media player
         self.player = QMediaPlayer(self)
@@ -68,6 +73,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return False
         if len(fileName) >= 2:
             self.multiple_file_flag = True
+        if str(fileName[0]).endswith(".pdf"):
+            total_pages = self.get_pdf_total_pages(fileName[0])
+            if total_pages > 1:
+                self.pdf_browse_file_flag = True
 
         self.path = fileName[0]
         self.path_list = fileName
@@ -87,30 +96,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return False
         if not self.browse_button_flag:
             self.path = self.ui.path_edit.text()
+        if self.multiple_file_flag or self.pdf_browse_file_flag:
+            self.ui.next_button.setEnabled(True)
+
         file_extension_list = [".jpg", ".png", ".jpeg", ".webp", ".tiff", ".bmp", ".svg", ".pdf"]
         self.file_name, self.file_extension = os.path.splitext(self.path)
         if self.file_extension in file_extension_list:
             if self.path.startswith("http://") or self.path.startswith("https://"):
-                if self.path.startswith("http://") or self.path.startswith("https://"):
-                    try:
-                        self.path = urllib.request.urlretrieve(self.path, f"image{self.file_extension}")[0]
-                    except Exception as error:
-                        self.msg.about(self, 'Error', "Unable to fetch data, please check your url")
-                        return False
+                try:
+                    self.path = urllib.request.urlretrieve(self.path, f"image{self.file_extension}")[0]
+                except Exception as error:
+                    self.msg.about(self, 'Error', "Unable to fetch data, please check your url")
+                    return False
 
             if os.path.isfile(self.path):
-                height, width = 700, 700
+                height, width = 600, 600
                 if self.file_extension == ".pdf":
-                    pdf_default_image_path = "asset/pdf_109.png"
-                    pixmap = QPixmap(pdf_default_image_path)
-                    height, width = 300, 300
+                    self.path_list = pdf_to_image(self.path)
+                    pixmap = QPixmap(self.path_list[0])
                 else:
                     pixmap = QPixmap(self.path)
                 pixmap4 = pixmap.scaled(height, width, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
                 self.ui.preview_label.setPixmap(pixmap4)
 
                 if self.file_extension == ".pdf":
-                    extracted_text = self.extract_data_from_pdf()
+                    extracted_text = extract.return_string(self.path_list[0])
                 else:
                     extracted_text = extract.return_string(self.path)
                 if extracted_text != "":
@@ -140,27 +150,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return False
 
     def get_next_button_clicked_action(self):
-        self.click_counter = 1
-        if self.multiple_file_flag:
-            #enable prev button code here
+        if self.multiple_file_flag or self.pdf_browse_file_flag:
+            self.ui.prev_button.setEnabled(True)
             self.path = self.path_list[self.click_counter:][0]
             self.click_counter += 1
             self.preview_button_clicked()
-            if self.click_counter == self.path_list:
-                #disable next button code here
-                return True
+            if self.click_counter == len(self.path_list):
+                self.ui.next_button.setEnabled(False)
 
     def get_prev_button_clicked_action(self):
-        if self.multiple_file_flag:
-            self.path = self.path_list[:-self.click_counter][len(self.path_list[:-self.click_counter])-1]
+        if self.multiple_file_flag or self.pdf_browse_file_flag:
+            self.path = self.path_list[:-self.click_counter+1][len(self.path_list[:-self.click_counter+1])-1]
             self.click_counter -= 1
             self.preview_button_clicked()
             if self.click_counter == 1:
-                # disable prev button code here
-                return True
+                self.ui.prev_button.setEnabled(False)
 
 
-    def extract_data_from_pdf(self):
+    def get_pdf_total_pages(self, path):
+        from PyPDF2 import PdfFileReader
+        pdf = PdfFileReader(open(path, 'rb'))
+        return pdf.getNumPages()
+
+
+
         data_by_pages = ""
         with open(self.path, mode='rb') as f:
             reader = PyPDF2.PdfFileReader(f)
