@@ -29,7 +29,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowTitle("Image2Text")
 
         self.make_invisible()
-
         self.msg = QMessageBox()
         self.multiple_file_flag = False
         self.browse_button_flag = True
@@ -48,9 +47,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.next_button.clicked.connect(self.get_next_button_clicked_action)
         self.ui.prev_button.clicked.connect(self.get_prev_button_clicked_action)
 
-
-
-
         # media player
         self.player = QMediaPlayer(self)
         self.player.setVolume(60)
@@ -64,7 +60,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.speed_comboBox.currentIndexChanged.connect(self.set_playback_speed)
         self.ui.stop_button.clicked.connect(self.player.stop)
         self.ui.pushButton.clicked.connect(self.convert_audio)
-
 
     def make_invisible(self):
         self.ui.prev_button.setVisible(False)
@@ -82,10 +77,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return False
         if len(fileName) >= 2:
             self.multiple_file_flag = True
-
         if str(fileName[0]).endswith(".pdf"):
-            total_pages = self.get_pdf_total_pages(fileName[0])
-            if total_pages > 1:
+            self.total_pages = self.get_pdf_total_pages(fileName[0])
+            if self.total_pages > 1:
                 self.pdf_browse_file_flag = True
 
         self.path = fileName[0]
@@ -110,7 +104,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.next_button.setVisible(True)
             self.ui.prev_button.setVisible(True)
             self.ui.next_button.setEnabled(True)
-
+            self.ui.page_no_label.setVisible(True)
+            if self.pdf_browse_file_flag:
+                self.ui.page_no_label.setText(f"Page {self.click_counter} of {self.total_pages}")
+            else:
+                self.ui.page_no_label.setText(f"Page {self.click_counter} of {len(self.path_list)}")
 
         file_extension_list = [".jpg", ".png", ".jpeg", ".webp", ".tiff", ".bmp", ".svg", ".pdf"]
         self.file_name, self.file_extension = os.path.splitext(self.path)
@@ -168,6 +166,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.path = self.path_list[self.click_counter:][0]
             self.click_counter += 1
             self.preview_button_clicked()
+            self.ui.page_no_label.setText(f"Page {self.click_counter} of {len(self.path_list)}")
             if self.click_counter == len(self.path_list):
                 self.ui.next_button.setEnabled(False)
 
@@ -176,23 +175,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.path = self.path_list[:-self.click_counter+1][len(self.path_list[:-self.click_counter+1])-1]
             self.click_counter -= 1
             self.preview_button_clicked()
+            self.ui.page_no_label.setText(f"Page {self.click_counter} of {len(self.path_list)}")
             if self.click_counter == 1:
                 self.ui.prev_button.setEnabled(False)
-
 
     def get_pdf_total_pages(self, path):
         from PyPDF2 import PdfFileReader
         pdf = PdfFileReader(open(path, 'rb'))
         return pdf.getNumPages()
-
-
-
-        data_by_pages = ""
-        with open(self.path, mode='rb') as f:
-            reader = PyPDF2.PdfFileReader(f)
-            for count, page in enumerate(reader.pages, 1):
-                data_by_pages += f"Page{count}:\n\n{page.extractText()}\n\n"
-        return str(data_by_pages)
 
     def set_items_in_combobox(self):
         self.ui.translate_comboBox.setEnabled(True)
