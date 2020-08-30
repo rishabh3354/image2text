@@ -139,6 +139,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except (requests.ConnectionError, requests.Timeout):
             return False
 
+    def get_next_button_clicked_action(self):
+        self.click_counter = 1
+        if self.multiple_file_flag:
+            #enable prev button code here
+            self.path = self.path_list[self.click_counter:][0]
+            self.click_counter += 1
+            self.preview_button_clicked()
+            if self.click_counter == self.path_list:
+                #disable next button code here
+                return True
+
+    def get_prev_button_clicked_action(self):
+        if self.multiple_file_flag:
+            self.path = self.path_list[:-self.click_counter][len(self.path_list[:-self.click_counter])-1]
+            self.click_counter -= 1
+            self.preview_button_clicked()
+            if self.click_counter == 1:
+                # disable prev button code here
+                return True
+
+
     def extract_data_from_pdf(self):
         data_by_pages = ""
         with open(self.path, mode='rb') as f:
