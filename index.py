@@ -28,6 +28,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.setupUi(self)
         self.setWindowTitle("Image2Text")
 
+        self.make_invisible()
+
         self.msg = QMessageBox()
         self.multiple_file_flag = False
         self.browse_button_flag = True
@@ -47,6 +49,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.prev_button.clicked.connect(self.get_prev_button_clicked_action)
 
 
+
+
         # media player
         self.player = QMediaPlayer(self)
         self.player.setVolume(60)
@@ -56,11 +60,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.player.durationChanged.connect(self.update_duration)
         self.ui.volume_slider.valueChanged.connect(self.player.setVolume)
         self.ui.radio_seek_slider.valueChanged.connect(self.player.setPosition)
-        # self.player.setMedia(QMediaContent(QUrl.fromLocalFile("/home/sherlock/bellaciao.mp3"))) #path of the extracted file
         self.ui.play_pause_button.clicked.connect(self.play_pause_button_clicked)
         self.ui.speed_comboBox.currentIndexChanged.connect(self.set_playback_speed)
         self.ui.stop_button.clicked.connect(self.player.stop)
         self.ui.pushButton.clicked.connect(self.convert_audio)
+
+
+    def make_invisible(self):
+        self.ui.prev_button.setVisible(False)
+        self.ui.next_button.setVisible(False)
+        self.ui.page_no_label.setVisible(False)
 
     # logic when browse button is clicked
     def browse_button_clicked(self):
@@ -73,6 +82,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return False
         if len(fileName) >= 2:
             self.multiple_file_flag = True
+
         if str(fileName[0]).endswith(".pdf"):
             total_pages = self.get_pdf_total_pages(fileName[0])
             if total_pages > 1:
@@ -97,7 +107,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.browse_button_flag:
             self.path = self.ui.path_edit.text()
         if self.multiple_file_flag or self.pdf_browse_file_flag:
+            self.ui.next_button.setVisible(True)
+            self.ui.prev_button.setVisible(True)
             self.ui.next_button.setEnabled(True)
+
 
         file_extension_list = [".jpg", ".png", ".jpeg", ".webp", ".tiff", ".bmp", ".svg", ".pdf"]
         self.file_name, self.file_extension = os.path.splitext(self.path)
