@@ -34,6 +34,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.browse_button_flag = True
         self.click_counter = 1
         self.pdf_browse_file_flag = False
+        self.cached_data_dict = dict()
 
         self.ui.path_edit.textChanged.connect(self.enable_preview_button)
         self.ui.browse_button.clicked.connect(self.browse_button_clicked)
@@ -98,13 +99,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not MainWindow.check_internet_connection():
             self.msg.about(self, 'No internet connection', "Please check your internet connection!")
             return False
-        if not self.browse_button_flag:
-            self.path = self.ui.path_edit.text()
         if self.multiple_file_flag or self.pdf_browse_file_flag:
-            self.ui.next_button.setVisible(True)
-            self.ui.prev_button.setVisible(True)
-            self.ui.next_button.setEnabled(True)
-            self.ui.page_no_label.setVisible(True)
+            self.enable_next_prev_button()
             if self.pdf_browse_file_flag:
                 self.ui.page_no_label.setText(f"Page {self.click_counter} of {self.total_pages}")
             else:
@@ -116,27 +112,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if self.path.startswith("http://") or self.path.startswith("https://"):
                 try:
                     self.path = urllib.request.urlretrieve(self.path, f"image{self.file_extension}")[0]
+                    if self.path.endswith(".pdf"):
+                        self.total_pages = self.get_pdf_total_pages(self.path)
+                        if self.total_pages > 1:
+                            self.pdf_browse_file_flag = True
+                            self.ui.page_no_label.setText(f"Page {self.click_counter} of {self.total_pages}")
+                            self.enable_next_prev_button()
+
                 except Exception as error:
                     self.msg.about(self, 'Error', "Unable to fetch data, please check your url")
                     return False
 
             if os.path.isfile(self.path):
-                height, width = 600, 600
+                # showing image in pixmap
+                height, width = self.frame_width_height_detect(600, 600)
                 if self.file_extension == ".pdf":
                     self.path_list = pdf_to_image(self.path)
                     pixmap = QPixmap(self.path_list[0])
+                    self.cached_data_dict[self.click_counter] = {"path": self.path_list[0], "text_data": ""}
                 else:
                     pixmap = QPixmap(self.path)
                 pixmap4 = pixmap.scaled(height, width, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
                 self.ui.preview_label.setPixmap(pixmap4)
 
+                # extracting data from image
                 if self.file_extension == ".pdf":
-                    extracted_text = extract.return_string(self.path_list[0])
+                    self.extracted_text = extract.return_string(self.path_list[0])
+                    self.cached_data_dict[self.click_counter] = {"path": self.path_list[0], "text_data": self.extracted_text}
                 else:
-                    extracted_text = extract.return_string(self.path)
-                if extracted_text != "":
+                    self.extracted_text = extract.return_string(self.path)
+                    self.cached_data_dict[self.click_counter] = {"path": self.path, "text_data": self.extracted_text}
+
+                if self.extracted_text != "":
                     self.set_items_in_combobox()
-                    self.ui.textEdit.setText(extracted_text)
+                    self.ui.textEdit.setText(self.extracted_text)
                     self.resize(1300, 500)
             else:
                 self.msg.about(self, 'Error', "Invalid File, Please select Valid Image File")
@@ -149,6 +158,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.preview_button.setEnabled(True)
             if str_data.startswith("http://") or str_data.startswith("https://"):
                 self.browse_button_flag = False
+                self.path = self.ui.path_edit.text()
         else:
             self.ui.preview_button.setEnabled(False)
 
@@ -165,19 +175,53 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.prev_button.setEnabled(True)
             self.path = self.path_list[self.click_counter:][0]
             self.click_counter += 1
-            self.preview_button_clicked()
+            self.get_cached_values() if self.check_cached_data() else self.preview_button_clicked()
             self.ui.page_no_label.setText(f"Page {self.click_counter} of {len(self.path_list)}")
             if self.click_counter == len(self.path_list):
                 self.ui.next_button.setEnabled(False)
+
+
+    def check_cached_data(self):
+        return True if self.cached_data_dict.get(self.click_counter) else False
+
+    def frame_width_height_detect(self, t_width, t_height):
+        # width = self.frameGeometry().width()
+        # height = self.frameGeometry().height()
+        # if t_width < width and t_height < height:
+        #     return height, width
+        # else:
+        return t_width, t_height
+
+    def get_cached_values(self):
+        cache_data = self.cached_data_dict[self.click_counter]
+        path = cache_data["path"]
+        text_data = cache_data["text_data"]
+        # setting cached data
+
+        height, width = 600, 600
+        pixmap = QPixmap(path)
+        pixmap4 = pixmap.scaled(height, width, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        self.ui.preview_label.setPixmap(pixmap4)
+
+        # self.set_items_in_combobox()
+        self.ui.textEdit.setText(text_data)
+        self.resize(1300, 600)
+
+    def enable_next_prev_button(self):
+        self.ui.next_button.setVisible(True)
+        self.ui.prev_button.setVisible(True)
+        self.ui.next_button.setEnabled(True)
+        self.ui.page_no_label.setVisible(True)
 
     def get_prev_button_clicked_action(self):
         if self.multiple_file_flag or self.pdf_browse_file_flag:
             self.path = self.path_list[:-self.click_counter+1][len(self.path_list[:-self.click_counter+1])-1]
             self.click_counter -= 1
-            self.preview_button_clicked()
+            self.get_cached_values() if self.check_cached_data() else self.preview_button_clicked()
             self.ui.page_no_label.setText(f"Page {self.click_counter} of {len(self.path_list)}")
             if self.click_counter == 1:
                 self.ui.prev_button.setEnabled(False)
+                self.ui.next_button.setEnabled(True)
 
     def get_pdf_total_pages(self, path):
         from PyPDF2 import PdfFileReader
